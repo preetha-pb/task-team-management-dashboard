@@ -3,6 +3,7 @@ import {
   FilterList,
   Search,
 } from "@mui/icons-material";
+
 import {
   Box,
   Button,
@@ -10,6 +11,59 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+
+import TaskTable, {
+  type Task,
+} from "../../components/tasks/TaskTable";
+
+const tasks: Task[] = [
+  {
+    id: 1,
+    title: "KYC Integration",
+    description: "Integrate KYC verification APIs",
+    assignee: "Preetha P B",
+    priority: "High",
+    status: "In Progress",
+    dueDate: "Sep 10, 2026",
+  },
+  {
+    id: 2,
+    title: "API Integration",
+    description: "Integrate customer management APIs",
+    assignee: "Priya P",
+    priority: "Medium",
+    status: "Completed",
+    dueDate: "Sep 08, 2026",
+  },
+  {
+    id: 3,
+    title: "Dashboard UI",
+    description: "Improve dashboard user experience",
+    assignee: "Saran S",
+    priority: "Low",
+    status: "Todo",
+    dueDate: "Sep 12, 2026",
+  },
+  {
+    id: 4,
+    title: "Authentication",
+    description: "Implement authentication flow",
+    assignee: "Kavya K",
+    priority: "High",
+    status: "In Progress",
+    dueDate: "Sep 11, 2026",
+  },
+  {
+    id: 5,
+    title: "Notifications",
+    description: "Build notification management module",
+    assignee: "Jegan Krishna",
+    priority: "Medium",
+    status: "Completed",
+    dueDate: "Sep 07, 2026",
+  },
+];
+
 
 const Tasks = () => {
   return (
@@ -110,6 +164,9 @@ const Tasks = () => {
           Filters
         </Button>
       </Box>
+
+      <TaskTable tasks={tasks} />
+
     </Box>
   );
 };
