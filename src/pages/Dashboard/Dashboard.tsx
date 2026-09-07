@@ -11,7 +11,7 @@ import { Box, Grid, Typography } from "@mui/material";
 import StatCard from "../../components/dashboard/StatCard";
 import TaskOverviewChart from "../../components/dashboard/TaskOverviewChart";
 import PriorityChart from "../../components/dashboard/PriorityChart";
-
+import RecentTasks from "../../components/dashboard/RecentTasks";
 
 
 const Dashboard = () => {
@@ -93,6 +93,7 @@ const Dashboard = () => {
         </Grid>
       </Box>
 
+      <RecentTasks />
 
     </Box>
   );
