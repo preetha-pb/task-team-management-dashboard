@@ -1,5 +1,4 @@
 import {
-  AssessmentOutlined,
   DashboardOutlined,
   GroupOutlined,
   LogoutOutlined,
@@ -108,12 +107,18 @@ const Sidebar = () => {
                             </ListItemIcon>
 
                             <ListItemText
-                                primary={item.label}
-                                primaryTypographyProps={{
-                                    fontSize: 14,
-                                    fontWeight: isActive ? 600 : 400,
-                                }}
+                                primary={
+                                    <Typography
+                                        sx={{
+                                            fontSize: 14,
+                                            fontWeight: isActive ? 600 : 400,
+                                        }}
+                                    >
+                                        {item.label}
+                                    </Typography>
+                                }
                             />
+
 
                         </ListItemButton>
                     );
@@ -145,10 +150,15 @@ const Sidebar = () => {
                     </ListItemIcon>
 
                     <ListItemText
-                        primary="Logout"
-                        primaryTypographyProps={{
-                            fontSize: 14,
-                        }}
+                        primary={
+                            <Typography
+                                sx={{
+                                    fontSize: 14,
+                                }}
+                            >
+                                Logout
+                            </Typography>
+                        }
                     />
 
                 </ListItemButton>
