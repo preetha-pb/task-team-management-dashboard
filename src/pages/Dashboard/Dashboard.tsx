@@ -9,6 +9,8 @@ import {
 import { Box, Grid, Typography } from "@mui/material";
 
 import StatCard from "../../components/dashboard/StatCard";
+import TaskOverviewChart from "../../components/dashboard/TaskOverviewChart";
+
 
 const Dashboard = () => {
   return (
@@ -76,6 +78,11 @@ const Dashboard = () => {
           />
         </Grid>
       </Grid>
+
+      <Box sx={{ mt: 2.5 }}>
+        <TaskOverviewChart />
+      </Box>
+
     </Box>
   );
 };
