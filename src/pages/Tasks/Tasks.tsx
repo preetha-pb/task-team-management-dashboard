@@ -1,71 +1,48 @@
-import {
-  Add,
-  FilterList,
-  Search,
-} from "@mui/icons-material";
+import { useState } from "react";
+import { Add, FilterList, Search, } from "@mui/icons-material";
+import { Box, Button, InputAdornment, TextField, Typography, } from "@mui/material";
+import TaskTable from "../../components/tasks/TaskTable";
+import TaskDialog, { type TaskFormData, } from "../../components/tasks/TaskDialog";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addTask } from "../../store/slices/tasksSlice";
 
-import {
-  Box,
-  Button,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
+const formatDueDate = (date: string) => {
+  if (!date) {
+    return "";
+  }
 
-import TaskTable, {
-  type Task,
-} from "../../components/tasks/TaskTable";
+  const parsedDate = new Date(`${date}T00:00:00`);
 
-const tasks: Task[] = [
-  {
-    id: 1,
-    title: "KYC Integration",
-    description: "Integrate KYC verification APIs",
-    assignee: "Preetha P B",
-    priority: "High",
-    status: "In Progress",
-    dueDate: "Sep 10, 2026",
-  },
-  {
-    id: 2,
-    title: "API Integration",
-    description: "Integrate customer management APIs",
-    assignee: "Priya P",
-    priority: "Medium",
-    status: "Completed",
-    dueDate: "Sep 08, 2026",
-  },
-  {
-    id: 3,
-    title: "Dashboard UI",
-    description: "Improve dashboard user experience",
-    assignee: "Saran S",
-    priority: "Low",
-    status: "Todo",
-    dueDate: "Sep 12, 2026",
-  },
-  {
-    id: 4,
-    title: "Authentication",
-    description: "Implement authentication flow",
-    assignee: "Kavya K",
-    priority: "High",
-    status: "In Progress",
-    dueDate: "Sep 11, 2026",
-  },
-  {
-    id: 5,
-    title: "Notifications",
-    description: "Build notification management module",
-    assignee: "Jegan Krishna",
-    priority: "Medium",
-    status: "Completed",
-    dueDate: "Sep 07, 2026",
-  },
-];
-
+  return parsedDate.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+};
 
 const Tasks = () => {
+
+  const dispatch = useAppDispatch();
+
+  const tasks = useAppSelector(
+    (state) => state.tasks.tasks
+  );
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleCreateTask = ( formData: TaskFormData ) => {
+    const newTask = {
+      id: Date.now(),
+      ...formData,
+      dueDate: formatDueDate(formData.dueDate),
+    };
+
+
+    dispatch(addTask(newTask));
+
+    setDialogOpen(false);
+  };
+
   return (
     <Box>
       {/* Page Header */}
@@ -102,6 +79,7 @@ const Tasks = () => {
         <Button
           variant="contained"
           startIcon={<Add />}
+          onClick={() => setDialogOpen(true)}
           sx={{
             textTransform: "none",
             borderRadius: 2,
@@ -113,6 +91,7 @@ const Tasks = () => {
         >
           Add Task
         </Button>
+
       </Box>
 
       {/* Toolbar */}
@@ -166,6 +145,11 @@ const Tasks = () => {
       </Box>
 
       <TaskTable tasks={tasks} />
+      <TaskDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onSubmit={handleCreateTask}
+      />
 
     </Box>
   );

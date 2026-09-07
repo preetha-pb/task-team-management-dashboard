@@ -1,3 +1,5 @@
+
+import { useState } from "react";
 import {
   Chip,
   IconButton,
@@ -9,12 +11,23 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
 } from "@mui/material";
 
 import {
   DeleteOutlined,
   EditOutlined,
 } from "@mui/icons-material";
+
+import { useAppDispatch, } from "../../store/hooks";
+
+import { deleteTask, } from "../../store/slices/tasksSlice";
+
 
 
 export type TaskStatus =
@@ -86,7 +99,11 @@ const getStatusStyle = (status: TaskStatus) => {
 };
 
 const TaskTable = ({ tasks }: TaskTableProps) => {
+  const dispatch = useAppDispatch();
+
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
   return (
+  <>
     <TableContainer
       component={Paper}
       elevation={0}
@@ -219,9 +236,11 @@ const TaskTable = ({ tasks }: TaskTableProps) => {
                     <IconButton
                       size="small"
                       color="error"
+                      onClick={() => setTaskToDelete(task)}
                     >
                       <DeleteOutlined fontSize="small" />
                     </IconButton>
+
                   </Tooltip>
                 </TableCell>
               </TableRow>
@@ -230,6 +249,60 @@ const TaskTable = ({ tasks }: TaskTableProps) => {
         </TableBody>
       </Table>
     </TableContainer>
+
+    <Dialog
+      open={Boolean(taskToDelete)}
+      onClose={() => setTaskToDelete(null)}
+      maxWidth="xs"
+      fullWidth
+    >
+      <DialogTitle
+        sx={{
+          fontWeight: 600,
+        }}
+      >
+        Delete Task?
+      </DialogTitle>
+
+      <DialogContent>
+        <Typography color="text.secondary">
+          Are you sure you want to delete{" "}
+          <strong>{taskToDelete?.title}</strong>?
+          This action cannot be undone.
+        </Typography>
+      </DialogContent>
+
+      <DialogActions sx={{ px: 3, pb: 2.5 }}>
+        <Button
+          onClick={() => setTaskToDelete(null)}
+          sx={{
+            textTransform: "none",
+          }}
+        >
+          Cancel
+        </Button>
+
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => {
+            if (taskToDelete) {
+              dispatch(deleteTask(taskToDelete.id));
+              setTaskToDelete(null);
+            }
+          }}
+          sx={{
+            textTransform: "none",
+            boxShadow: "none",
+          }}
+        >
+          Delete
+        </Button>
+      </DialogActions>
+    </Dialog>
+
+  </>
+
   );
 };
 
