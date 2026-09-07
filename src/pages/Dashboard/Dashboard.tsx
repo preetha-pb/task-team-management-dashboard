@@ -10,6 +10,8 @@ import { Box, Grid, Typography } from "@mui/material";
 
 import StatCard from "../../components/dashboard/StatCard";
 import TaskOverviewChart from "../../components/dashboard/TaskOverviewChart";
+import PriorityChart from "../../components/dashboard/PriorityChart";
+
 
 
 const Dashboard = () => {
@@ -80,8 +82,17 @@ const Dashboard = () => {
       </Grid>
 
       <Box sx={{ mt: 2.5 }}>
-        <TaskOverviewChart />
+        <Grid container spacing={2.5}>
+          <Grid size={{ xs: 12, md: 8 }}>
+            <TaskOverviewChart />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 4 }}>
+            <PriorityChart />
+          </Grid>
+        </Grid>
       </Box>
+
 
     </Box>
   );
