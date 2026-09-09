@@ -5,20 +5,9 @@ import TaskTable from "../../components/tasks/TaskTable";
 import TaskDialog, { type TaskFormData, } from "../../components/tasks/TaskDialog";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { addTask } from "../../store/slices/tasksSlice";
+import { formatDueDate } from "../../utils/date";
 
-const formatDueDate = (date: string) => {
-  if (!date) {
-    return "";
-  }
 
-  const parsedDate = new Date(`${date}T00:00:00`);
-
-  return parsedDate.toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  });
-};
 
 const Tasks = () => {
 

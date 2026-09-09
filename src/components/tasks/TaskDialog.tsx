@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -10,12 +10,15 @@ import {
 } from "@mui/material";
 
 import type {
+  Task,
   TaskPriority,
   TaskStatus,
 } from "./TaskTable";
+import { parseDueDate } from "../../utils/date";
 
 interface TaskDialogProps {
   open: boolean;
+  taskData?: Task;
   onClose: () => void;
   onSubmit: (task: TaskFormData) => void;
 }
@@ -40,11 +43,23 @@ const initialFormData: TaskFormData = {
 
 const TaskDialog = ({
   open,
+  taskData,
   onClose,
-  onSubmit,
+  onSubmit
 }: TaskDialogProps) => {
   const [formData, setFormData] =
     useState<TaskFormData>(initialFormData);
+
+  useEffect(() => {
+    if(taskData){
+      setFormData({
+        ...taskData,
+        dueDate: parseDueDate(taskData.dueDate),
+      })
+    } else {
+      setFormData(initialFormData)
+    }
+  }, [taskData])
 
   const handleChange = (
     field: keyof TaskFormData,
@@ -83,7 +98,7 @@ const TaskDialog = ({
           fontWeight: 600,
         }}
       >
-        Add New Task
+        {taskData ? "Edit Task": "Add New Task"}
       </DialogTitle>
 
       <DialogContent>
@@ -204,7 +219,7 @@ const TaskDialog = ({
             boxShadow: "none",
           }}
         >
-          Create Task
+          {taskData ? "Update Task": "Create Task"}
         </Button>
       </DialogActions>
     </Dialog>

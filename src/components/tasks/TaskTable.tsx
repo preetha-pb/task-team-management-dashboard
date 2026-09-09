@@ -26,7 +26,9 @@ import {
 
 import { useAppDispatch, } from "../../store/hooks";
 
-import { deleteTask, } from "../../store/slices/tasksSlice";
+import { deleteTask, updateTask, } from "../../store/slices/tasksSlice";
+import TaskDialog, { type TaskFormData, } from "./TaskDialog";
+import { formatDueDate } from "../../utils/date";
 
 
 
@@ -102,6 +104,27 @@ const TaskTable = ({ tasks }: TaskTableProps) => {
   const dispatch = useAppDispatch();
 
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
+  const [taskToEdit, setTaskToEdit] = useState<Task | undefined>();
+  const [editModal, setEditModal] = useState(false);
+
+  const handleEditTask = (formData : TaskFormData) => {
+    if (!taskToEdit) return;
+
+    const editTask = {
+      id: taskToEdit.id,
+      ...formData,
+      dueDate: formatDueDate(formData.dueDate),
+    };
+
+    dispatch(updateTask(editTask))
+    setEditModal(false)
+  }
+
+  const handleCloseEdit = () => {
+    setEditModal(false);
+    setTaskToEdit(undefined);
+  }
+
   return (
   <>
     <TableContainer
@@ -227,7 +250,13 @@ const TaskTable = ({ tasks }: TaskTableProps) => {
 
                 <TableCell align="right">
                   <Tooltip title="Edit task">
-                    <IconButton size="small">
+                    <IconButton 
+                      size="small"
+                      onClick={() => {
+                        setTaskToEdit(task);
+                        setEditModal(true);
+                      }}
+                    >
                       <EditOutlined fontSize="small" />
                     </IconButton>
                   </Tooltip>
@@ -300,6 +329,13 @@ const TaskTable = ({ tasks }: TaskTableProps) => {
         </Button>
       </DialogActions>
     </Dialog>
+
+    <TaskDialog
+      open={editModal}
+      onClose={handleCloseEdit}
+      onSubmit={handleEditTask}
+      taskData={taskToEdit}
+    />
 
   </>
 
